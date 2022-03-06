@@ -73,20 +73,25 @@ const follow = async (req, res) => {
     }
 };
 
+function findFollowers(){
+  let data = Followers.findAll({
+    where : {
+      Followed : req.user.id 
+    },
+    attributes : [Follower]
+  })
+  console.log(data)
+  data = await User.findAll({
+    where  : {
+      id : data.Follower
+    }
+  })
+
+  return data
+}
 const getFollowers = async (req, res) => {
     try{
-      let data = Followers.findAll({
-        where : {
-          Followed : req.user.id 
-        },
-        attributes : [Follower]
-      })
-      console.log(data)
-      data = await User.findAll({
-        where  : {
-          id : data.Follower
-        }
-      })
+      data = findFollowers();
 
       return res.status(200).send({
         status : "Success",
@@ -103,7 +108,20 @@ const getFollowers = async (req, res) => {
 };
 
 const getUserStats = (req, res) => {
-  //getUserStats api logic here
+  try{
+    data = findFollowers();
+    return res.status(200).send({
+      status : "Success",
+      msg : "UserStats Data",
+      data : data
+    });
+  }
+  catch(e){
+    return res.send({
+      status : "Failed",
+      massage : "ServerSide Error"
+    })
+  }
 };
 
 const searchUsers = (req, res) => {
