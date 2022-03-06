@@ -1,7 +1,6 @@
 const express = require("express");
 const UserController = require("../controllers/user.controller");
 const router = express.Router();
-const UserController = require("../controllers/user.controller");
 const Joi = require("joi");
 
 const isAuth = require("../middlewares/auth.middleware").auth;

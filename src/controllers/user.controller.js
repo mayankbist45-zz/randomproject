@@ -71,8 +71,8 @@ const follow = async (req, res) => {
   }
 };
 
-function findFollowers() {
-  let data = Followers.findAll({
+async function findFollowers() {
+  let data = await Followers.findAll({
     where: {
       Followed: req.user.id,
     },
@@ -120,7 +120,7 @@ const getUserStats = (req, res) => {
   }
 };
 
-const searchUsers = (req, res) => {
+const searchUsers = async (req, res) => {
   try {
     let data = await User.findOne({
       where: {
@@ -140,7 +140,7 @@ const searchUsers = (req, res) => {
   }
 };
 
-const getTweetsForUser = (req, res) => {
+const getTweetsForUser = async (req, res) => {
   try {
     let data = await Followers.findAll({
       where: {

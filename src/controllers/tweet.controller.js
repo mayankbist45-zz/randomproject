@@ -19,16 +19,16 @@ const tweet = async (req, res) => {
 
 const deleteTweet = async (req, res) => {
   try {
-    if (req.query.id === undefined || !Number.isInteger(req.query.id)) {
+    if (req.query.id === undefined || +req.query.id === NaN) {
       return res.status(400).send({
-        status: "Success",
+        status: "Error",
         message: "Bad Input",
       });
     }
     await tweet.destroy({
       where: {
-        userId: req.user.id,
-        tweet: req.query.id,
+        userId: +req.user.id,
+        tweet: +req.query.id,
       },
     });
 
