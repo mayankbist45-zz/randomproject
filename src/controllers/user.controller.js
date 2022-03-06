@@ -6,7 +6,7 @@ const User = require("../services/db.services").User;
 require("dotenv").config();
 
 const register = (req, res) => {
-    userModel
+  userModel
     .findAll({
       where: {
         emailId: req.body.emailId,
@@ -20,7 +20,7 @@ const register = (req, res) => {
           .create({
             emailId: req.body.emailId,
             password: hash,
-            username : req.body.username
+            username: req.body.username,
           })
           .catch((err) => console.log("Error in signup controller", err));
 
@@ -36,143 +36,136 @@ const register = (req, res) => {
 };
 
 const follow = async (req, res) => {
-    try{
-
-      let data = await Followers.findOne({
-        where : {
-          Follower : req.user.id,
-          Followed : req.body.Followed
-        }
-      })
-      let msg = "";
-      if(data.length === 0){
-        await Followers.create({
-          Follower : req.user.id,
-          Followed : req.body.Followed
-        });
-        msg = "Followed Successfully";
-      }
-      else{
-        await Followers.destory({
-          where : {
-            Follower : req.user.id,
-            Followed : req.body.Followed
-          }
-        });
-        msg = "UnFollowed Successfully";
-      }
-      return res.status(200).send({
-        status : "Success",
-        msg: msg 
-      })
+  try {
+    let data = await Followers.findOne({
+      where: {
+        Follower: req.user.id,
+        Followed: req.body.Followed,
+      },
+    });
+    let msg = "";
+    if (data.length === 0) {
+      await Followers.create({
+        Follower: req.user.id,
+        Followed: req.body.Followed,
+      });
+      msg = "Followed Successfully";
+    } else {
+      await Followers.destory({
+        where: {
+          Follower: req.user.id,
+          Followed: req.body.Followed,
+        },
+      });
+      msg = "UnFollowed Successfully";
     }
-    catch(e){
-      return res.status(500).send({
-        status : "Failed",
-        massage : "ServerSide Error"
-      })
-    }
+    return res.status(200).send({
+      status: "Success",
+      msg: msg,
+    });
+  } catch (e) {
+    return res.status(500).send({
+      status: "Failed",
+      massage: "ServerSide Error",
+    });
+  }
 };
 
-function findFollowers(){
+function findFollowers() {
   let data = Followers.findAll({
-    where : {
-      Followed : req.user.id 
+    where: {
+      Followed: req.user.id,
     },
-    attributes : [Follower]
-  })
-  console.log(data)
+    attributes: [Follower],
+  });
+  console.log(data);
   data = await User.findAll({
-    where  : {
-      id : data.Follower
-    }
-  })
+    where: {
+      id: data.Follower,
+    },
+  });
 
-  return data
+  return data;
 }
 const getFollowers = async (req, res) => {
-    try{
-      data = findFollowers();
+  try {
+    data = findFollowers();
 
-      return res.status(200).send({
-        status : "Success",
-        msg : "Followers Data",
-        data : data
-      });
-    }
-    catch(e){
-      return res.status(500).send({
-        status : "Failed",
-        massage : "ServerSide Error"
-      })
-    }
+    return res.status(200).send({
+      status: "Success",
+      msg: "Followers Data",
+      data: data,
+    });
+  } catch (e) {
+    return res.status(500).send({
+      status: "Failed",
+      massage: "ServerSide Error",
+    });
+  }
 };
 
 const getUserStats = (req, res) => {
-  try{
+  try {
     data = findFollowers();
     return res.status(200).send({
-      status : "Success",
-      msg : "UserStats Data",
-      data : data
+      status: "Success",
+      msg: "UserStats Data",
+      data: data,
     });
-  }
-  catch(e){
+  } catch (e) {
     return res.send({
-      status : "Failed",
-      massage : "ServerSide Error"
-    })
+      status: "Failed",
+      massage: "ServerSide Error",
+    });
   }
 };
 
 const searchUsers = (req, res) => {
-  try{
+  try {
     let data = await User.findOne({
-      where : {
-        username : req.query.user
-      }
-    })
+      where: {
+        username: req.query.user,
+      },
+    });
     return res.send(200).send({
-      status : "Success",
-      message : "User data",
-      data : data
-    })
-  }
-  catch(e){
+      status: "Success",
+      message: "User data",
+      data: data,
+    });
+  } catch (e) {
     return res.status(500).send({
-      status : "Failed",
-      message : "ServerSide Error"
-    })
+      status: "Failed",
+      message: "ServerSide Error",
+    });
   }
 };
 
 const getTweetsForUser = (req, res) => {
-    try{
-      let data = await Followers.findAll({
-        where : {
-          Follower : req.user.id
-        },
-        attributes : [Followed]
-      });
+  try {
+    let data = await Followers.findAll({
+      where: {
+        Follower: req.user.id,
+      },
+      attributes: [Followed],
+    });
 
-      data = Tweet.findAll({
-        where : {
-          userId : data.Followed
-        },
-        orderby : ['createdAt','ASC']
-      })
-      return res.status(200).send({
-        status : "Success",
-        msg : "Tweet ",
-        data : data
-      })
-    }
-    catch(e){
-      return res.status(500).send({
-        status : "Failed",
-        massage : "ServerSide Error"
-      })
-    }
+    data = Tweet.findAll({
+      where: {
+        userId: data.Followed,
+      },
+      orderby: ["createdAt", "ASC"],
+    });
+    return res.status(200).send({
+      status: "Success",
+      msg: "Tweet ",
+      data: data,
+    });
+  } catch (e) {
+    return res.status(500).send({
+      status: "Failed",
+      massage: "ServerSide Error",
+    });
+  }
 };
 
 const UserController = {
