@@ -2,19 +2,28 @@ const Tweet = require("../services/db.services").Tweet;
 const TweetLike = require("../services/db.services").TweetLike;
 
 const tweet = async (req, res) => {
-  try {
-    await Tweet.create({ userId: req.user.id, tweet: req.body.tweet });
+    try{
+        if(username !== req.body.username){
+            return res.send({
+                status : "Success",
+                msg : "Incorrect Username"
+            })
+        }
+        await Tweet.create({userId : req.user.id,tweet : req.body.tweet});
+        
+        return res.status(201).send({
+            status : "Success",
+            message : `Tweet: ${req.body.tweet} is successfully tweeted by user: ${req.body.username}`
+        })
 
-    return res.status(201).send({
-      status: "Success",
-      message: `Tweet: ${req.body.tweet} is successfully tweeted by user: ${req.body.username}`,
-    });
-  } catch (e) {
-    return res.status(500).send({
-      status: "Failed",
-      message: "Server Side Error",
-    });
-  }
+    }
+    catch(e){
+        return res.status(500).send({
+            status : "Failed",
+            message : "Server Side Error"
+        })
+
+    }
 };
 
 const deleteTweet = async (req, res) => {
