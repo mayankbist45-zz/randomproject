@@ -14,5 +14,6 @@ db.sequelize = sequelize
 db.Tweet = require("../models/Tweet")(sequelize,Sequelize);
 db.TweetLike = require("../models/Tweetlike")(sequelize,Sequelize);
 db.User = require("../models/User")(sequelize, Sequelize);
+db.Followers = require("../models/Followers")(sequelize, Sequelize);
 
 module.exports = db;

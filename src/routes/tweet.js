@@ -7,7 +7,7 @@ const Joi = require('joi')
 const validator = require('../middlewares/validate.middleware');
 
 const addtweetschema = Joi.object().keys({
-    userId :  Joi.number().min(0).required(),
+    username :  Joi.string().min(1).required(),
     tweet : Joi.string().min(1).max(10000).required()
 })
 
@@ -15,7 +15,7 @@ const liketweetschema = Joi.object().keys({
     tweetId : Joi.number().required()
 })
 
-router.post('/addtweet',[isauth,validator(addtweetschema)],TweetController.tweet);
+router.post('/tweet',[isauth,validator(addtweetschema)],TweetController.tweet);
 router.get('/deletetweet',[isauth],TweetController.deleteTweet);
 router.put('/liketweet',[isauth,validator(liketweetschema), TweetController.likeTweet])
 module.exports = router;
