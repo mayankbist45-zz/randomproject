@@ -10,6 +10,7 @@ const validate = require("../middlewares/validate.middleware");
 const signupSchema = Joi.object().keys({
   emailId: Joi.string().required().min(1),
   password: Joi.string().required().min(1),
+  username : Joi.string().required()
 });
 
 const followSchema = Joi.object().keys({

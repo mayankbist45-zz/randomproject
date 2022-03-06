@@ -20,6 +20,7 @@ const register = (req, res) => {
           .create({
             emailId: req.body.emailId,
             password: hash,
+            username : req.body.username
           })
           .catch((err) => console.log("Error in signup controller", err));
 
