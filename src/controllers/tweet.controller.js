@@ -4,11 +4,11 @@ const TweetLike = require("../services/db.services").TweetLike
 const tweet = async (req, res) => {
     try{
 
-        await Tweet.create({userId : req.body.userId,tweet : req.body.tweet});
+        await Tweet.create({userId : req.user.id,tweet : req.body.tweet});
         
         return res.status(201).send({
             status : "Success",
-            message : "Tweeted Successfully"
+            message : `Tweet: ${req.body.tweet} is successfully tweeted by user: ${req.body.username}`
         })
 
     }
