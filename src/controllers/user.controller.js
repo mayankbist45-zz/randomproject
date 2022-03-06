@@ -108,15 +108,32 @@ const getFollowers = async (req, res) => {
 
 const getUserStats = async (req, res) => {
   try {
-    data = await findFollowers(req);
-    
+    data = await Followers.findAll({
+      where: {
+        Followed: req.user.id,
+      },
+      attributes: ["Follower"],
+    });
+    let follower = data.map((follower) => follower.Follower);
+
+    data = await User.findAndCountAll({
+      where: {
+        id: follower,
+      },
+    });
+    let tweetdata = await Tweet.findAndCountAll({
+      where: {
+        userId: req.user.id,
+      },
+    });
     return res.status(200).send({
       status: "Success",
-      msg: "UserStats Data",
-      data: data,
+      msg: "User Stats",
+      followersCount: data.count,
+      tweetCount: tweetdata.count,
     });
   } catch (e) {
-    return res.send({
+    return res.status(500).send({
       status: "Failed",
       massage: "ServerSide Error",
     });
