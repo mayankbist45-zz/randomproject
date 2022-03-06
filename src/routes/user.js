@@ -16,7 +16,7 @@ const followSchema = Joi.object().keys({
   Followed: Joi.number().required().min(1),
 });
 
-
+router.get('/deleteUser',isAuth,UserController.deleteuser);
 router.post("/signUp", validate(signupSchema), UserController.register);
 router.post("/follow", [isAuth, validate(followSchema)], UserController.follow);
 router.post("/getFollowers", [isAuth], UserController.getFollowers);
