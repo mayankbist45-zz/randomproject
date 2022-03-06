@@ -44,14 +44,14 @@ const follow = async (req, res) => {
       },
     });
     let msg = "";
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
       await Followers.create({
         Follower: req.user.id,
         Followed: req.body.Followed,
       });
       msg = "Followed Successfully";
     } else {
-      await Followers.destory({
+      await Followers.destroy({
         where: {
           Follower: req.user.id,
           Followed: req.body.Followed,

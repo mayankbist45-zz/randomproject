@@ -20,7 +20,9 @@ router.post(
   [isauth, validator(addtweetschema)],
   TweetController.tweet
 );
+
 router.delete("/deletetweet", [isauth], TweetController.deleteTweet);
+
 router.put("/liketweet", [
   isauth,
   validator(liketweetschema),

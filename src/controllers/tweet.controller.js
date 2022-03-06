@@ -2,28 +2,25 @@ const Tweet = require("../services/db.services").Tweet;
 const TweetLike = require("../services/db.services").TweetLike;
 
 const tweet = async (req, res) => {
-    try{
-        if(username !== req.body.username){
-            return res.send({
-                status : "Success",
-                msg : "Incorrect Username"
-            })
-        }
-        await Tweet.create({userId : req.user.id,tweet : req.body.tweet});
-        
-        return res.status(201).send({
-            status : "Success",
-            message : `Tweet: ${req.body.tweet} is successfully tweeted by user: ${req.body.username}`
-        })
-
+  try {
+    if (username !== req.body.username) {
+      return res.send({
+        status: "Success",
+        msg: "Incorrect Username",
+      });
     }
-    catch(e){
-        return res.status(500).send({
-            status : "Failed",
-            message : "Server Side Error"
-        })
+    await Tweet.create({ userId: req.user.id, tweet: req.body.tweet });
 
-    }
+    return res.status(201).send({
+      status: "Success",
+      message: `Tweet: ${req.body.tweet} is successfully tweeted by user: ${req.body.username}`,
+    });
+  } catch (e) {
+    return res.status(500).send({
+      status: "Failed",
+      message: "Server Side Error",
+    });
+  }
 };
 
 const deleteTweet = async (req, res) => {
@@ -34,10 +31,10 @@ const deleteTweet = async (req, res) => {
         message: "Bad Input",
       });
     }
-    await tweet.destroy({
+    await Tweet.destroy({
       where: {
-        userId: +req.user.id,
-        tweet: +req.query.id,
+        userId: req.user.id,
+        id: +req.query.id,
       },
     });
 
@@ -61,7 +58,7 @@ const likeTweet = async (req, res) => {
       },
     });
 
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
       return res.send(400).send({
         status: "Success",
         message: "Bad Input",
@@ -74,25 +71,29 @@ const likeTweet = async (req, res) => {
       },
     });
 
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
       await TweetLike.create({
         tweetId: req.body.tweetId,
         userId: req.user.id,
       });
-    } else {
-      await TweetLike.destroy({
-        where: {
-          tweetId: req.body.tweetId,
-          userId: req.user.id,
-        },
+      return res.status(201).send({
+        status: "Success",
+        message: "Tweet Liked",
       });
     }
 
-    return res.status(201).send({
+    await TweetLike.destroy({
+      where: {
+        tweetId: req.body.tweetId,
+        userId: req.user.id,
+      },
+    });
+    return res.status(200).send({
       status: "Success",
-      message: "Tweet Liked",
+      message: "Tweet Unliked",
     });
   } catch (e) {
+    console.log(e);
     return res.status(500).send({
       status: "Failed",
       message: "Server Side Error",
