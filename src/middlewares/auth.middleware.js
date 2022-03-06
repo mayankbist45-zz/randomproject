@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
+const User = require("../services/db.services").User
 module.exports.auth = (req, res, next) => {
   let bearerHeader = req.headers["authorization"];
 
@@ -15,8 +15,12 @@ module.exports.auth = (req, res, next) => {
       if (err) {
         return res.status(403).send({ msg: "Invalid Token" });
       }
-      console.log(user);
-      req.user = user;
+      let data = User.findOne({
+        where : {
+          id : user.id
+        }
+      })
+      req.user = data;
       next();
     });
   } else {
