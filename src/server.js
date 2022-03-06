@@ -5,6 +5,8 @@ const cors = require("cors");
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cors());
 
 // sample for express server
@@ -20,8 +22,7 @@ app.listen(
 );
 
 // fetch routes
-let userRouter = require('./routes/user');
+let userRouter = require("./routes/user");
 
 //define root routes.
-app.use('/user', userRouter);
-
+app.use("/user", userRouter);
