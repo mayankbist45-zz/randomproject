@@ -17,5 +17,5 @@ const liketweetschema = Joi.object().keys({
 
 router.post('/addtweet',[isauth,validator(addtweetschema)],TweetController.tweet);
 router.get('/deletetweet',[isauth],TweetController.deleteTweet);
-router.put('/liketweet',[isauth,validator(liketweetschema)])
+router.put('/liketweet',[isauth,validator(liketweetschema), TweetController.likeTweet])
 module.exports = router;

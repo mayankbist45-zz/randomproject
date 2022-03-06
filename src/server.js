@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const db = require('./services/db.services')
+const db = require("./services/db.services");
 
 const app = express();
 
@@ -10,16 +10,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
-
 db.sequelize.sync();
 //db.sequelize.sync({force : true});
 
 // sample for express server
-app.use("/", (req, res, next) => {
-  res.status(200).json({ success: true, data: "Start Here" });
-});
+// app.use("/", (req, res, next) => {
+//   res.status(200).json({ success: true, data: "Start Here" });
+// });
 
-const PORT = process.env.PORT || 8080; // port at which server listening
+const PORT = process.env.PORT || 8081; // port at which server listening
 
 app.listen(
   PORT,
@@ -30,6 +29,8 @@ app.listen(
 let userRouter = require("./routes/user");
 app.use("/", userRouter);
 
+let authRouter = require("./routes/auth");
+app.use("/", authRouter);
+
 let tweetRouter = require("./routes/tweet");
 app.use("/", tweetRouter);
-

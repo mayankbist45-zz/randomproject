@@ -3,7 +3,6 @@ const router = express.Router();
 const AuthController = require("../controllers/auth.controller");
 const Joi = require("joi");
 
-const isAuth = require("../middlewares/auth.middleware").auth;
 const validate = require("../middlewares/validate.middleware");
 
 const loginPasswordSchema = Joi.object().keys({
@@ -12,16 +11,7 @@ const loginPasswordSchema = Joi.object().keys({
 });
 
 // Create routes for user here
-router.post("login", validate(loginPasswordSchema), AuthController.login);
-
-route.post(
-  "/loginByEmailPassword",
-  validate(loginPasswordSchema),
-  authCtrl.loginByEmailPassword
-);
-
-route.post("/signUpEmailPassword", authCtrl.signUpEmailPassword);
-route.post("/forgetPassword", authCtrl.forgetPassword);
-route.post("/resetPassword", authCtrl.resetPassword);
+router.post("/login", validate(loginPasswordSchema), AuthController.login);
+router.post("/signUp", AuthController.signUp);
 
 module.exports = router;
