@@ -193,6 +193,32 @@ const getTweetsForUser = async (req, res) => {
   }
 };
 
+const deleteuser = async (req,res) => {
+  try{
+    await Tweet.destroy({
+      where : {
+        userId : req.user.id
+      }
+    });
+
+    await User.destroy({
+      where : {
+        id : req.user.id
+      }
+    });
+
+    return res.status(200).send({
+      status : "Success",
+      message : "User Deleted"
+    })
+  }
+  catch(e){
+    return res.status(500).send({
+      status : "Failed",
+      message : "Server Side Error"
+    })
+  }
+}
 const UserController = {
   register,
   follow,
@@ -200,6 +226,7 @@ const UserController = {
   getUserStats,
   searchUsers,
   getTweetsForUser,
+  deleteuser
 };
 
 module.exports = UserController;
