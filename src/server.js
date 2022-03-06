@@ -1,11 +1,18 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const db = require('./services/db.services')
 
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cors());
+
+
+db.sequelize.sync();
+//db.sequelize.sync({force : true});
 
 // sample for express server
 app.use("/", (req, res, next) => {
@@ -20,8 +27,9 @@ app.listen(
 );
 
 // fetch routes
-let userRouter = require('./routes/user');
+let userRouter = require("./routes/user");
+app.use("/", userRouter);
 
-//define root routes.
-app.use('/user', userRouter);
+let tweetRouter = require("./routes/tweet");
+app.use("/", tweetRouter);
 
