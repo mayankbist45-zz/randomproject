@@ -27,10 +27,10 @@ app.listen(
 
 // fetch routes
 let userRouter = require("./routes/user");
-app.use("/", userRouter);
+app.use("/users", userRouter);
 
 let authRouter = require("./routes/auth");
-app.use("/", authRouter);
+app.use("/login", authRouter);
 
 let tweetRouter = require("./routes/tweet");
-app.use("/", tweetRouter);
+app.use("/tweets", tweetRouter);

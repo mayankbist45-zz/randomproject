@@ -11,7 +11,6 @@ const loginPasswordSchema = Joi.object().keys({
 });
 
 // Create routes for user here
-router.post("/login", validate(loginPasswordSchema), AuthController.login);
-router.post("/signUp", AuthController.signUp);
+router.post("/", validate(loginPasswordSchema), AuthController.login);
 
 module.exports = router;

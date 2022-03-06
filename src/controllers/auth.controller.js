@@ -46,38 +46,9 @@ const login = (req, res) => {
     });
 };
 
-const signUp = (req, res) => {
-  userModel
-    .findAll({
-      where: {
-        emailId: req.body.emailId,
-      },
-    })
-    .then((data) => {
-      console.log(data);
-      if (data.length == 0) {
-        const hash = bcrypt.hashSync(req.body.password, 10);
-        userModel
-          .create({
-            emailId: req.body.emailId,
-            password: hash,
-          })
-          .catch((err) => console.log("Error in signup controller", err));
-
-        return res.send({
-          msg: "User Signed Up Successfully",
-        });
-      }
-      return res.send({
-        msg: "user already exist",
-      });
-    })
-    .catch((err) => console.log("Error in signup controller", err));
-};
 
 const AuthController = {
   login,
-  signUp,
 };
 
 module.exports = AuthController;
