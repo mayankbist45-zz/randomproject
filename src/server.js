@@ -13,13 +13,8 @@ app.use(cors());
 db.sequelize.sync();
 //db.sequelize.sync({force : true});
 
-// sample for express server
-// app.use("/", (req, res, next) => {
-//   res.status(200).json({ success: true, data: "Start Here" });
-// });
-
-const PORT = process.env.PORT || 8081; // port at which server listening
-
+const PORT = process.env.PORT || 8081; 
+//start the server
 app.listen(
   PORT,
   console.log(`server started in ${process.env.NODE_ENV} mode at port ${PORT}`)

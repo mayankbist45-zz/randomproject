@@ -10,7 +10,7 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-
+//importing all models here
 db.Tweet = require("../models/Tweet")(sequelize, Sequelize);
 db.TweetLike = require("../models/Tweetlike")(sequelize, Sequelize);
 db.User = require("../models/User")(sequelize, Sequelize);
