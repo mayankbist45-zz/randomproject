@@ -21,6 +21,6 @@ router.post("/follow", [isAuth, validate(followSchema)], UserController.follow);
 router.post("/getFollowers", [isAuth], UserController.getFollowers);
 router.post("/getTweetsForUser", [isAuth], UserController.getTweetsForUser);
 router.get("/searchUsers", [isAuth], UserController.searchUsers);
-router.post("/getUserStats", [isAuth], UserController.getUserStats);
+router.get("/getUserStats", [isAuth], UserController.getUserStats);
 
 module.exports = router;

@@ -71,25 +71,27 @@ const follow = async (req, res) => {
   }
 };
 
-async function findFollowers() {
+async function findFollowers(req) {
   let data = await Followers.findAll({
     where: {
       Followed: req.user.id,
     },
-    attributes: [Follower],
+    attributes: ["Follower"],
   });
   console.log(data);
+  let followers = data.map((follower) => follower.Follower);
   data = await User.findAll({
     where: {
-      id: data.Follower,
+      id: followers,
     },
   });
 
   return data;
 }
+
 const getFollowers = async (req, res) => {
   try {
-    data = findFollowers();
+    data = await findFollowers(req);
 
     return res.status(200).send({
       status: "Success",
@@ -104,9 +106,10 @@ const getFollowers = async (req, res) => {
   }
 };
 
-const getUserStats = (req, res) => {
+const getUserStats = async (req, res) => {
   try {
-    data = findFollowers();
+    data = await findFollowers(req);
+    
     return res.status(200).send({
       status: "Success",
       msg: "UserStats Data",
@@ -127,10 +130,11 @@ const searchUsers = async (req, res) => {
         username: req.query.user,
       },
     });
-    return res.send(200).send({
+
+    return res.status(200).send({
       status: "Success",
       message: "User data",
-      data: data,
+      data: { id: data.id, username: data.username, email: data.email },
     });
   } catch (e) {
     return res.status(500).send({
@@ -146,21 +150,25 @@ const getTweetsForUser = async (req, res) => {
       where: {
         Follower: req.user.id,
       },
-      attributes: [Followed],
+      attributes: ["Followed"],
     });
 
-    data = Tweet.findAll({
+    console.log(data);
+    let followers = data.map((follower) => follower.Followed);
+
+    data = await Tweet.findAll({
       where: {
-        userId: data.Followed,
+        userId: followers,
       },
-      orderby: ["createdAt", "ASC"],
+      orderby: ["createdAt", "DESC"],
     });
     return res.status(200).send({
       status: "Success",
-      msg: "Tweet ",
+      msg: "Tweets",
       data: data,
     });
   } catch (e) {
+    console.log(e);
     return res.status(500).send({
       status: "Failed",
       massage: "ServerSide Error",

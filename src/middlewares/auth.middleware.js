@@ -25,7 +25,6 @@ module.exports.auth = (req, res, next) => {
         },
       });
       req.user = data.dataValues;
-      console.log(req.user);
       next();
     });
   } else {
