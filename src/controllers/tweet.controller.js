@@ -1,14 +1,23 @@
 const Tweet = require("../services/db.services").Tweet;
 const TweetLike = require("../services/db.services").TweetLike;
 
+/** Add Tweet
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+
 const tweet = async (req, res) => {
   try {
+    //verify username
     if (username !== req.body.username) {
       return res.send({
         status: "Success",
         msg: "Incorrect Username",
       });
     }
+    //create tweet
     await Tweet.create({ userId: req.user.id, tweet: req.body.tweet });
 
     return res.status(201).send({
@@ -23,14 +32,23 @@ const tweet = async (req, res) => {
   }
 };
 
+/** Delete Tweet
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+
 const deleteTweet = async (req, res) => {
   try {
+    //verifing tweet id
     if (req.query.id === undefined || +req.query.id === NaN) {
       return res.status(400).send({
         status: "Error",
         message: "Bad Input",
       });
     }
+    //delete tweet
     await Tweet.destroy({
       where: {
         userId: req.user.id,
@@ -50,8 +68,15 @@ const deleteTweet = async (req, res) => {
   }
 };
 
+/** Like and Unlike Tweet
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 const likeTweet = async (req, res) => {
   try {
+    // check if tweet id exists
     let data = await Tweet.findOne({
       where: {
         id: req.body.tweetId,
@@ -64,6 +89,7 @@ const likeTweet = async (req, res) => {
         message: "Bad Input",
       });
     }
+    //find tweet is alredy liked or not
     data = await TweetLike.findOne({
       where: {
         tweetId: req.body.tweetId,
@@ -72,6 +98,7 @@ const likeTweet = async (req, res) => {
     });
 
     if (!data || data.length === 0) {
+        //like tweet
       await TweetLike.create({
         tweetId: req.body.tweetId,
         userId: req.user.id,
@@ -81,7 +108,7 @@ const likeTweet = async (req, res) => {
         message: "Tweet Liked",
       });
     }
-
+    //unlike tweet
     await TweetLike.destroy({
       where: {
         tweetId: req.body.tweetId,
