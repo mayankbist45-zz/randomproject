@@ -1,4 +1,7 @@
 const jwt = require("jsonwebtoken");
+const userModel = require("../services/db.services").User;
+const bcrypt = require("bcrypt");
+
 require("dotenv").config();
 
 const generateToken = (data, res) => {
